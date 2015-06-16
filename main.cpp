@@ -20,9 +20,6 @@ typedef struct sockaddr SOCKADDR;
 #include <iostream>
 #define PORT 1234
 
-typedef int SOCKET;
-typedef struct sockaddr_in SOCKADDR_IN;
-typedef struct sockaddr SOCKADDR;
 int main(void)
 {
     /*QApplication a(argc, argv);

@@ -5,6 +5,7 @@ ClientThread::ClientThread(int clientSocket):clientSocket_(clientSocket)
 
 }
 void ClientThread::run() {
+
     verifyClient();
 }
 
@@ -26,6 +27,7 @@ void ClientThread::verifyClient(){
             shutdown(this->clientSocket_, 2);
         }
     }
+
 }
 
 
@@ -55,8 +57,10 @@ void ClientThread::receiveData(){
 }
 
 
+
 void ClientThread::sendData(char buffer[256]){
     //char buffer[256] = "ALORS JUNITO";
+
 
     sock_err = send(this->clientSocket_, buffer, 256, 0);
     if(sock_err != SOCKET_ERROR){
@@ -70,10 +74,14 @@ void ClientThread::sendData(char buffer[256]){
 
 void ClientThread::sendDataToClient(){
     std::cout << "GRANT ACCESS YAH\n" << std::endl;
+
     //sendData();
+
 }
 
 void ClientThread::sendDinieAccessToClient(){
     std::cout << "DENI ACCESS YAH\n" << std::endl;
+
     //sendData();
+
 }

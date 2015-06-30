@@ -13,8 +13,16 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    tcp_server.cpp \
+    filemanager.cpp \
+    accesscodeslist.cpp \
+    clientthread.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    tcp_server.h \
+    filemanager.h \
+    accesscodeslist.h \
+    clientthread.h
 
 FORMS    += mainwindow.ui

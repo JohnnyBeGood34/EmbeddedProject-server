@@ -28,6 +28,7 @@ void ClientThread::verifyClient(){
     }
 }
 
+
 void ClientThread::receiveData(){
     QByteArray array;
     char control[2];

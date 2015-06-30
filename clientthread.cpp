@@ -5,8 +5,29 @@ ClientThread::ClientThread(int clientSocket):clientSocket_(clientSocket)
 
 }
 void ClientThread::run() {
-    receiveData();
-    sendData();
+
+    verifyClient();
+}
+
+void ClientThread::verifyClient(){
+    char control[4];
+    char granttMessage[256] = "GRANTT";
+    char denieMessage[256] = "DENIE";
+    sock_err = recv(this->clientSocket_,control,4,0);
+    //If the socket is okay
+    if(sock_err != SOCKET_ERROR){
+        //If client is known
+        if(QString::fromUtf8(control) == "SDJA"){
+            sendData(granttMessage);
+            receiveData();
+        }else{
+            std::cout << "CLIENT DENIED " << std::endl;
+            sendData(denieMessage);
+            //Close client socket
+            shutdown(this->clientSocket_, 2);
+        }
+    }
+
 }
 
 void ClientThread::receiveData(){
@@ -35,8 +56,10 @@ void ClientThread::receiveData(){
 }
 
 
-void ClientThread::sendData(){
-    char buffer[256] = "ALORS JUNITO";
+
+void ClientThread::sendData(char buffer[256]){
+    //char buffer[256] = "ALORS JUNITO";
+
 
     sock_err = send(this->clientSocket_, buffer, 256, 0);
     if(sock_err != SOCKET_ERROR){
@@ -50,10 +73,14 @@ void ClientThread::sendData(){
 
 void ClientThread::sendDataToClient(){
     std::cout << "GRANT ACCESS YAH\n" << std::endl;
-    sendData();
+
+    //sendData();
+
 }
 
 void ClientThread::sendDinieAccessToClient(){
     std::cout << "DENI ACCESS YAH\n" << std::endl;
-    sendData();
+
+    //sendData();
+
 }

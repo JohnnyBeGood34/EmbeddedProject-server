@@ -35,7 +35,10 @@ private slots:
     void sendDataToClient();
     void sendDinieAccessToClient();
 private:
-    void sendData();
+
+    void verifyClient();
+    void sendData(char buffer[256]);
+
     void receiveData();
     int clientSocket_;
     int sock_err;

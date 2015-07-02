@@ -10,12 +10,14 @@ void ClientThread::run() {
 }
 
 void ClientThread::verifyClient(){
-    char control[4];
+    char control[256];
     char granttMessage[256] = "GRANTT";
     char denieMessage[256] = "DENIE";
-    sock_err = recv(this->clientSocket_,control,4,0);
+    sock_err = recv(this->clientSocket_,control,256,0);
     //If the socket is okay
+
     if(sock_err != SOCKET_ERROR){
+        control[sock_err] = '\0';
         //If client is known
         if(QString::fromUtf8(control) == "SDJA"){
             sendData(granttMessage);
@@ -33,19 +35,14 @@ void ClientThread::verifyClient(){
 
 void ClientThread::receiveData(){
     QByteArray array;
-    char control[2];
+
     char buffer[256];
-
-
-    /*sock_err = recv(this->clientSocket_,control,2,0);
-    sock_err = recv(this->clientSocket_,(char*)&size,sizeof(long),0);*/
-
-
     sock_err = recv(this->clientSocket_,buffer,256,0);
 
 
     array.append(buffer,sock_err);
     if(sock_err != SOCKET_ERROR){
+        //Receive code
         buffer[sock_err] = '\0';
         std::cout << "Chaine Reçue : "<<buffer << std::endl;
         QString dataReceived = QString::fromUtf8(buffer);

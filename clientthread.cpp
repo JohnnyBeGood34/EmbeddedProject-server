@@ -10,7 +10,7 @@ void ClientThread::run() {
     receiveData();
 }
 
-void ClientThread::verifyClient(){
+/*void ClientThread::verifyClient(){
     char control[256];
     char granttMessage[256] = "GRANTT";
     char denieMessage[256] = "DENIE";
@@ -31,7 +31,7 @@ void ClientThread::verifyClient(){
         }
     }
 
-}
+}*/
 
 void ClientThread::receiveData(){
     QByteArray array;

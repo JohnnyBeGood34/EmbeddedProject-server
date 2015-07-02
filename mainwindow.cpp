@@ -5,6 +5,8 @@
 #include <iostream>
 #include <memory>
 #include "pthread.h"
+#include <QGraphicsPixmapItem>
+#include <QPixmap>
 using namespace std;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,8 +18,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     populateListOfCodes();
     connect(this->server,SIGNAL(accessCodeReceived(QString)),this->ui->codeReceived, SLOT(setText(QString)));
+    connect(this->server,SIGNAL(onPhotoReceivedSignal(QImage&)),this,SLOT(onPhotoReceived(QImage&)));
     connect(this,SIGNAL(sendGranttAccessToClient()),this->server,SLOT(sendDataToClient()));
     connect(this,SIGNAL(sendDinieAccessToClient()),this->server,SLOT(sendDinieAccessToClient()));
+
 }
 
 MainWindow::~MainWindow()
@@ -47,6 +51,24 @@ void MainWindow::populateListOfCodes(){
 
 }
 
+void MainWindow::onPhotoReceived(QImage &image){
+    setPhoto(image);
+}
+
+void MainWindow::setPhoto(QImage &image){
+
+    QGraphicsPixmapItem item(QPixmap::fromImage(image));
+    QGraphicsScene* scene = new QGraphicsScene;
+    scene->addItem(&item);
+
+    ui->graphicsView->setScene(scene);
+    ui->graphicsView->setRenderHints(QPainter::Antialiasing);
+
+    //scene->setSceneRect(0,0, fondPhoto.width(), fondPhoto.height());
+    //scene->addPixmap(item.scaled(ui->graphicsView->width(),ui->graphicsView->height(),Qt::IgnoreAspectRatio, Qt::FastTransformation));
+
+}
+
 void MainWindow::on_startServerButton_clicked()
 {
     server->start();
@@ -60,9 +82,4 @@ void MainWindow::on_grantAccessButton_clicked()
 void MainWindow::on_denieAccess_clicked()
 {
     emit sendDinieAccessToClient();
-}
-
-void MainWindow::on_stopServerButton_clicked()
-{
-    this->server->stopServer();
 }

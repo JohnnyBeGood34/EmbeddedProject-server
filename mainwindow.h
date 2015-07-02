@@ -3,6 +3,7 @@
 #include "tcp_server.h"
 #include <QMainWindow>
 #include <QStringListModel>
+#include <QImage>
 namespace Ui {
 class MainWindow;
 }
@@ -15,6 +16,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void populateListOfCodes();
+    void setPhoto(QImage &image);
 signals:
     void accessCodeReceived(QString &data);
     void sendGranttAccessToClient();
@@ -26,8 +28,7 @@ private slots:
     void on_grantAccessButton_clicked();
 
     void on_denieAccess_clicked();
-
-    void on_stopServerButton_clicked();
+    void onPhotoReceived(QImage &image);
 private:
     Ui::MainWindow *ui;
     TCP_Server *server;

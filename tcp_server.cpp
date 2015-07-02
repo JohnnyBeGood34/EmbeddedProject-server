@@ -25,9 +25,15 @@ void TCP_Server::run(){
         connect(t,SIGNAL(accessCodeReceived(QString)),this, SLOT(accessCodeReceivedSlot(QString)));
         connect(this,SIGNAL(sendDataToClientSignal()),t,SLOT(sendDataToClient()));
         connect(this,SIGNAL(sendDinieAccessToClientSignal()),t,SLOT(sendDinieAccessToClient()));
+        connect(t,SIGNAL(onPhotoReceivedSignal(QImage&)),this,SLOT(onPhotoReceived(QImage&)));
         t->start();
     }
 
+}
+
+
+void TCP_Server::onPhotoReceived(QImage &image){
+    emit onPhotoReceivedSignal(image);
 }
 
 void TCP_Server::startServer(){

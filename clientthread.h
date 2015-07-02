@@ -31,6 +31,7 @@ public:
     virtual void run();
 signals:
     void accessCodeReceived(const QString &data);
+    void onPhotoReceivedSignal(QImage &image);
 private slots:
     void sendDataToClient();
     void sendDinieAccessToClient();

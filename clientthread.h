@@ -31,10 +31,10 @@ public:
     virtual void run();
 signals:
     void accessCodeReceived(const QString &data);
-    void onPhotoReceivedSignal(QImage &image);
+    void onPhotoReceivedSignal(QString &image);
 private slots:
-    void sendDataToClient();
-    void sendDinieAccessToClient();
+    void sendDataToClient(void);
+    void sendDinieAccessToClient(void);
 private:
     void sendData(char buffer[256]);
     void receiveData();

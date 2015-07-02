@@ -18,10 +18,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     populateListOfCodes();
     connect(this->server,SIGNAL(accessCodeReceived(QString)),this->ui->codeReceived, SLOT(setText(QString)));
-    connect(this->server,SIGNAL(onPhotoReceivedSignal(QImage&)),this,SLOT(onPhotoReceived(QImage&)));
-    connect(this,SIGNAL(sendGranttAccessToClient()),this->server,SLOT(sendDataToClient()));
-    connect(this,SIGNAL(sendDinieAccessToClient()),this->server,SLOT(sendDinieAccessToClient()));
-
+    connect(this->server,SIGNAL(onPhotoReceivedSignal(QString&)),this,SLOT(onPhotoReceived(QString&)),Qt::DirectConnection);
+    connect(this,SIGNAL(sendGranttAccessToClient(void)),this->server,SLOT(sendDataToClient(void)));
+    connect(this,SIGNAL(sendDinieAccessToClient(void)),this->server,SLOT(sendDinieAccessToClient(void)));
 }
 
 MainWindow::~MainWindow()
@@ -51,15 +50,15 @@ void MainWindow::populateListOfCodes(){
 
 }
 
-void MainWindow::onPhotoReceived(QImage &image){
+void MainWindow::onPhotoReceived(QString &image){
     setPhoto(image);
 }
 
-void MainWindow::setPhoto(QImage &image){
+void MainWindow::setPhoto(QString &image){
 
-    QGraphicsPixmapItem item(QPixmap::fromImage(image));
-    QGraphicsScene* scene = new QGraphicsScene;
-    scene->addItem(&item);
+    QGraphicsScene* scene = new QGraphicsScene();
+    QPixmap pixmap("/home/guest/Desktop/test.jpg");
+    scene->addPixmap(pixmap.scaled(ui->graphicsView->width(),ui->graphicsView->height(),Qt::IgnoreAspectRatio, Qt::FastTransformation));
 
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing);

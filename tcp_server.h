@@ -35,12 +35,12 @@ signals:
     void accessCodeReceived(const QString &data);
     void sendDataToClientSignal();
     void sendDinieAccessToClientSignal();
-    void onPhotoReceivedSignal(QImage &image);
+    void onPhotoReceivedSignal(QString &image);
 private slots:
     void accessCodeReceivedSlot(const QString &data);
     void sendDataToClient();
     void sendDinieAccessToClient();
-    void onPhotoReceived(QImage &image);
+    void onPhotoReceived(QString &image);
 private :
     int port_;
     SOCKET sock_;

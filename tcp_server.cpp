@@ -23,16 +23,16 @@ void TCP_Server::run(){
 
         ClientThread *t = new ClientThread(this->clientSocket_);
         connect(t,SIGNAL(accessCodeReceived(QString)),this, SLOT(accessCodeReceivedSlot(QString)));
-        connect(this,SIGNAL(sendDataToClientSignal()),t,SLOT(sendDataToClient()));
-        connect(this,SIGNAL(sendDinieAccessToClientSignal()),t,SLOT(sendDinieAccessToClient()));
-        connect(t,SIGNAL(onPhotoReceivedSignal(QImage&)),this,SLOT(onPhotoReceived(QImage&)));
+        connect(this,SIGNAL(sendDataToClientSignal(void)),t,SLOT(sendDataToClient(void)),Qt::DirectConnection);
+        connect(this,SIGNAL(sendDinieAccessToClientSignal(void)),t,SLOT(sendDinieAccessToClient(void)),Qt::DirectConnection);
+        connect(t,SIGNAL(onPhotoReceivedSignal(QString&)),this,SLOT(onPhotoReceived(QString&)),Qt::DirectConnection);
         t->start();
     }
 
 }
 
 
-void TCP_Server::onPhotoReceived(QImage &image){
+void TCP_Server::onPhotoReceived(QString &image){
     emit onPhotoReceivedSignal(image);
 }
 
@@ -79,9 +79,11 @@ void TCP_Server::accessCodeReceivedSlot(const QString &data){
 }
 
 void TCP_Server::sendDataToClient(){
+    std::cout << "SEND ACCESS CLIENT" << std::endl;
     emit sendDataToClientSignal();
 }
 
 void TCP_Server::sendDinieAccessToClient(){
+    std::cout << "SEND DENIE CLIENT" << std::endl;
     emit sendDinieAccessToClientSignal();
 }

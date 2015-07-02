@@ -16,7 +16,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void populateListOfCodes();
-    void setPhoto(QImage &image);
+    void setPhoto(QString &image);
 signals:
     void accessCodeReceived(QString &data);
     void sendGranttAccessToClient();
@@ -28,7 +28,7 @@ private slots:
     void on_grantAccessButton_clicked();
 
     void on_denieAccess_clicked();
-    void onPhotoReceived(QImage &image);
+    void onPhotoReceived(QString &image);
 private:
     Ui::MainWindow *ui;
     TCP_Server *server;

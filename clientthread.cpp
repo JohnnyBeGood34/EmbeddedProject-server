@@ -1,12 +1,13 @@
 #include "clientthread.h"
-
+#include <QString>
+#include <QStringList>
 ClientThread::ClientThread(int clientSocket):clientSocket_(clientSocket)
 {
 
 }
 void ClientThread::run() {
 
-    verifyClient();
+    receiveData();
 }
 
 void ClientThread::verifyClient(){
@@ -32,21 +33,40 @@ void ClientThread::verifyClient(){
 
 }
 
-
 void ClientThread::receiveData(){
     QByteArray array;
 
     char buffer[256];
     sock_err = recv(this->clientSocket_,buffer,256,0);
-
+    std::cout<< " nouveau message"<<std::endl;
 
     array.append(buffer,sock_err);
     if(sock_err != SOCKET_ERROR){
         //Receive code
         buffer[sock_err] = '\0';
-        std::cout << "Chaine Reçue : "<<buffer << std::endl;
-        QString dataReceived = QString::fromUtf8(buffer);
-        emit accessCodeReceived(dataReceived);
+        std::cout << "MOTHER FUCKIN BUFFER : "<<buffer<< std::endl;
+        QString bufferToString = QString::fromUtf8(buffer);
+        QStringList list = bufferToString.split("|");
+        if(list[0] == "CODE"){
+            char code[256] = "BIEN RECUT GROS";
+            std::cout << "Chaine Reçue : "<<list[1].toStdString() << std::endl;
+            QString dataReceived = list[1];
+            sendData(code);
+            emit accessCodeReceived(dataReceived);
+            buffer[0]='\0';
+        }
+        else if(list[0] == "SIZE"){
+            char test[256] = "YOYOYO";
+            std::cout << "SIZE RECUE : "<<list[1].toStdString() << std::endl;
+            sendData(test);
+            buffer[0]='\0';
+        }
+        else if(list[0] == "PHOTO"){
+            std::cout << "PHOTO RECUE : "<<list[1].toStdString() << std::endl;
+            buffer[0]='\0';
+        }
+
+
     }
     else{
         std::cout << "Erreur de transmission\n" << std::endl;
@@ -56,8 +76,6 @@ void ClientThread::receiveData(){
 
 
 void ClientThread::sendData(char buffer[256]){
-    //char buffer[256] = "ALORS JUNITO";
-
 
     sock_err = send(this->clientSocket_, buffer, 256, 0);
     if(sock_err != SOCKET_ERROR){
@@ -67,6 +85,7 @@ void ClientThread::sendData(char buffer[256]){
     else{
         std::cout << "Erreur de transmission\n" << std::endl;
     }
+    buffer[0]='\0';
 }
 
 void ClientThread::sendDataToClient(){

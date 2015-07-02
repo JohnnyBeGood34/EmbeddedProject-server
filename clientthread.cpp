@@ -1,6 +1,7 @@
 #include "clientthread.h"
 #include <QString>
 #include <QStringList>
+#include <QImage>
 ClientThread::ClientThread(int clientSocket):clientSocket_(clientSocket)
 {
 
@@ -39,7 +40,7 @@ void ClientThread::receiveData(){
     char buffer[256];
     sock_err = recv(this->clientSocket_,buffer,256,0);
     std::cout<< " nouveau message"<<std::endl;
-
+    QString sizeOfPhoto;
     array.append(buffer,sock_err);
     if(sock_err != SOCKET_ERROR){
         //Receive code
@@ -58,11 +59,17 @@ void ClientThread::receiveData(){
         else if(list[0] == "SIZE"){
             char test[256] = "YOYOYO";
             std::cout << "SIZE RECUE : "<<list[1].toStdString() << std::endl;
+            sizeOfPhoto = list[1];
             sendData(test);
             buffer[0]='\0';
         }
         else if(list[0] == "PHOTO"){
             std::cout << "PHOTO RECUE : "<<list[1].toStdString() << std::endl;
+            int photoSize = sizeOfPhoto.toInt();
+            QByteArray array = list[1].toLatin1();
+            QImage image;
+            image.loadFromData(array,"jpg");
+            emit onPhotoReceivedSignal(image);
             buffer[0]='\0';
         }
 
